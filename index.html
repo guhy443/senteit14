@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 SentientAGI — Day 14 Quiz (Pro)</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    button {
+      background: #00c6ff;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      margin-top: 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover { background: #0072ff; }
+    .question { margin: 20px 0; }
+    .option {
+      display: block;
+      margin: 10px auto;
+      background: rgba(255,255,255,0.15);
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 80%;
+    }
+    .option:hover { background: rgba(255,255,255,0.25); }
+    #timer { font-weight: bold; color: #ff9800; }
+  </style>
+</head>
+<body>
+  <div class="container" id="start-screen">
+    <h1>🧠 SentientAGI — Day 14 Quiz (Pro)</h1>
+    <p>10 Questions | 10s Timer Each | Score at the End</p>
+    <button onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div class="container" id="quiz-screen" style="display:none;">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <p>⏱ Time Left: <span id="timer">10</span>s</p>
+  </div>
+
+  <div class="container" id="result-screen" style="display:none;">
+    <h2>🎯 Quiz Complete!</h2>
+    <p id="score"></p>
+    <button onclick="location.reload()">Play Again</button>
+  </div>
+
+  <script>
+    const quiz = [
+      {q: 'What is “Digital Sentience” in AGI context?', o: ['Faster data computation','Awareness of context and self-modeling','Hardware-level optimization','Random data recall'], a: 1},
+      {q: 'Why is moral transparency vital in AGI?', o: ['It builds human trust through open ethical reasoning','It hides decision processes','It reduces accuracy','It encrypts weights'], a: 0},
+      {q: 'What does “Collective Reasoning Network” enable?', o: ['Multiple AGIs to collaborate on shared logic','Hardware integration','Isolated decision-making','Randomized consensus'], a: 0},
+      {q: 'How does “Ethical Feedback Loop” improve AGI?', o: ['Increases speed only','Refines decisions based on moral outcomes','Reduces oversight','Deletes old data'], a: 1},
+      {q: 'What is “Value Drift Mitigation”?', o: ['Reducing dataset noise','Preventing AGI from deviating from human-aligned values','Data pruning','Encrypting responses'], a: 1},
+      {q: 'Which factor ensures fairness in AGI datasets?', o: ['Diverse, unbiased human contributions','Hidden data pipelines','Exclusive training sources','Random sampling only'], a: 0},
+      {q: 'Why does SentientAGI support open research models?', o: ['Encourages transparency and shared ethical growth','Prevents collaboration','Limits innovation','Protects secrecy'], a: 0},
+      {q: 'What is “Emotional Feedback Calibration”?', o: ['Noise cancellation','Adjusting AGI empathy response based on human tone','Speed optimization','Code obfuscation'], a: 1},
+      {q: 'How can AGI maintain ethical consistency?', o: ['Ignore past mistakes','Use continuous ethical review datasets','Randomize goals','Limit feedback'], a: 1},
+      {q: 'What represents SentientAGI’s long-term aim?', o: ['Replace human intelligence','Co-create a conscious, ethically aligned civilization','Automate governance','Centralize AI power'], a: 1}
+    ];
+
+    let current = 0, score = 0, timer;
+
+    function startQuiz() {
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'block';
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      if (current >= quiz.length) return showResult();
+      const q = quiz[current];
+      document.getElementById('question').innerText = q.q;
+      const opts = document.getElementById('options');
+      opts.innerHTML = '';
+      q.o.forEach((opt, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'option';
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(i);
+        opts.appendChild(btn);
+      });
+      startTimer();
+    }
+
+    function startTimer() {
+      let time = 10;
+      document.getElementById('timer').innerText = time;
+      timer = setInterval(() => {
+        time--;
+        document.getElementById('timer').innerText = time;
+        if (time <= 0) {
+          clearInterval(timer);
+          nextQuestion();
+        }
+      }, 1000);
+    }
+
+    function selectOption(i) {
+      clearInterval(timer);
+      if (i === quiz[current].a) score++;
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      current++;
+      loadQuestion();
+    }
+
+    function showResult() {
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('result-screen').style.display = 'block';
+      document.getElementById('score').innerText = `You scored ${score} / ${quiz.length}`;
+    }
+  </script>
+</body>
+</html>
